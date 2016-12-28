@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+  <mapper namespace="givook.notice">
+
+  <select id="selectBynextVal" resultType="int">
+ select sq_notice.nextval from dual
+  </select> 
+  
+  <insert id="insertNotice" parameterType="noticedto" >
+  insert into notice(noticeNo, userId, noticeTitle, noticeDate, noticeStatus,
+noticeContent, noticeCount, noticeMethod, noticeLocation) values
+(
+#{noticeNo:INTEGER},
+#{userId:VARCHAR},
+#{noticeTitle:VARCHAR}, 
+sysdate,
+'1',
+#{noticeContent:VARCHAR},
+0,
+#{noticeMethod:VARCHAR},
+#{noticeLocation:VARCHAR}
+)
+  </insert>
+  
+   <insert id="insertBook" parameterType="bookdto">
+  insert into books(noticeNo, bookSubject, bookPrice, bookPic, bookGenre ,bookNum, bookQty) values (
+#{noticeNo:INTEGER}, 
+#{bookSubject:VARCHAR},
+#{bookPrice:VARCHAR},
+#{bookPic:VARCHAR},
+#{bookGenre:VARCHAR},
+#{bookNum:VARCHAR},
+#{bookQty:VARCHAR}
+)
+  
+  </insert>
+  
+  <delete id="deleteNotice" parameterType="int">
+  delete from notice where noticeNo=#{noticeNo}
+  
+  </delete>
+  
+  <delete id="deleteBook" parameterType="int">
+  delete from books where noticeNo=#{noticeNo}
+  </delete>
+  <update id="updateCount" parameterType="Map"  >
+  update notice set noticeCount=#{noticeCount:INTEGER} where noticeNo=#{noticeNo:INTEGER}
+  </update>
+  
+  <select id="selectBynoticeAll" resultType="noticedto" parameterType="int">
+ 
+  select noticeNo, userId, noticeTitle, to_char(noticeDate, 'yyyy/mm/dd mm:mi:ss') "noticeDate", noticeStatus, noticeContent, noticeCount, noticeMethod, noticeLocation from notice where noticeNo=#{noticeNo}
+  </select>
+  
+  
+  <select id="selectByBookAll" resultType="bookdto" parameterType="int">
+  select * from books where noticeNo=#{noticeNo}
+  </select>
+  
+  <insert id="createReply" parameterType="replydto">
+  insert into reply (replyNo, noticeNo, userId, replyContent, replyDate)
+  values
+  (
+  sq_reply.nextval,
+  #{noticeNo:INTEGER},
+  #{userId:VARCHAR},
+  #{replyContent:VARCHAR},
+ sysdate
+  )
+  </insert>
+  
+  <delete id="deleteReply" parameterType="Map">
+  delete from reply where noticeNo=#{noticeNo} and replyNo=#{replyNo} and userId=#{userId}
+  </delete>
+  
+  <select id="selectReplyList" resultType="replydto" parameterType="int">
+  select replyNo, noticeNo, userId, replyContent, to_char(replyDate, 'yyyy/mm/dd mm:mi:ss') "replyDate" from reply where noticeNo=#{noticeNo}
+  </select>
+  
+  
+<select id="selectMessage" parameterType="String" resultType="messagedto">
+  select * from messages where fromUserId=#{fromUserId:VARCHAR}
+  </select>
+ 
+<select id="selectMessageP" parameterType="map" resultType="messagedto">
+	select * from
+      (select rownum as rn, t1.* from
+      (select * from messages where fromUserId=#{userId:VARCHAR} order by messagedate desc) t1
+      )
+      where rn between ${low} and ${high}
+
+</select>
+  
+  <select id="selectReceiveMessage" parameterType="String" resultType="messagedto">
+  select * from messages where userId=#{userId:VARCHAR}
+  </select>
+  
+<select id="selectReceiveMessageP" parameterType="map" resultType="messagedto">
+	select * from
+      (select rownum as rn, t1.* from
+      (select * from messages where UserId=#{userId:VARCHAR} order by messagedate desc) t1
+      )
+      where rn between ${low} and ${high}
+
+</select>
+
+  <insert id="insertMessage" parameterType="messagedto">
+  insert into messages(messageId,fromUserId, userId, messageContent, messageTitle, messageDate)
+  values(
+  sq_message.nextval,
+  #{fromUserId:VARCHAR},
+  #{userId:VARCHAR},
+  #{messageContent:VARCHAR},
+  #{messageTitle:VARCHAR},
+  sysdate)
+  </insert>
+  
+  
+  <select id="selectByNoticeMax" parameterType="Map" resultType="com.twoyears.model.board.BoardBookDTO">
+  
+  select n.noticeno,
+      n.userid, n.noticetitle, to_char(n.noticedate,'yyyy/mm/dd hh:mi:ss') "noticedate", 
+      n.noticestatus, n.noticecontent, n.noticecount,
+      n.noticemethod, n.noticelocation,
+      b.bookSubject, b.bookPic, b.bookPrice,
+      b.bookGenre, b.bookNum, b.bookQTY,
+      u.userpwd, u.username,u.usernick,u.userphone, u.useremail, u.userpoint from notice n, books b where noticeNo=
+  (select max(n.noticeNo) from notice n, books b where n.noticeNo = b.noticeNo and n.noticeNo > #{noticeNo} 
+  and b.bookgenre like '%'||'${bookGenre}'||'%')
+  
+  
+  </select>
+  </mapper>

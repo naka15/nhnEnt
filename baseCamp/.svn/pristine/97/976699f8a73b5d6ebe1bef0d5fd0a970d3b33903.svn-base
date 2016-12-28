@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="givook.mapper.favorite">
+
+	<select id="getMyfavorite" parameterType="map"
+		resultMap="selectbookimg">
+		select noticeno, noticetitle, userid, to_char(noticedate,'yyyy/mm/dd hh:mi:ss') "noticedate", noticestatus, noticecount,
+		noticemethod, noticelocation
+		from notice 
+		where noticeno=${noticeno}
+	</select>
+
+	<select id="selectFavoriteByUserId" parameterType="map"
+		resultType="int">
+		select noticeno from favorite where userid=${userId}
+	</select>
+	<resultMap type="com.twoyears.model.dto.BoardDTO" id="selectbookimg">
+		<result property="noticeNo" column="noticeNo" />
+		<result property="noticeTitle" column="noticeTitle" />
+		<result property="userID" column="userID" />
+		<result property="noticeDate" column="noticeDate" />
+		<result property="noticeStatus" column="noticeStatus" />
+		<result property="noticeCount" column="noticeCount" />
+		<result property="noticeMethod" column="noticeMethod" />
+		<result property="noticeLocation" column="noticeLocation" />
+		<association property = "book" column = "noticeno" select="selectbookGenre"/>
+		<association property = "userNick" column= "userID" select="selectusernick"></association>
+	</resultMap>
+	<select id="selectbookGenre" resultType="com.twoyears.model.dto.BookDTO">
+		select * from books where noticeno = #{aa} 
+	</select>
+	<select id="selectusernick" resultType="String">
+		select userNick from users where userid=#{userID}
+	</select>
+
+<insert id="insertFavorite" parameterType="com.twoyears.model.dto.FavoriteDTO">
+insert into favorite (userId, noticeNo) values( 
+#{userId:VARCHAR}, 
+ #{noticeNo:INTEGER}
+ )
+</insert>
+
+<select id="selectDupli" parameterType="Map" resultType="com.twoyears.model.dto.FavoriteDTO">
+select * from favorite where userId=#{userId:VARCHAR} and noticeNo=#{noticeNo:INTEGER}
+</select>
+</mapper>

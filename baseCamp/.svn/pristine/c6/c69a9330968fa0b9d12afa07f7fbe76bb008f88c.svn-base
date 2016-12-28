@@ -1,0 +1,114 @@
+
+<%@page import="java.util.List"%>
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+	pageEncoding="EUC-KR"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+
+<style>
+#boxmenu {
+	width: 520px;
+	height: 30px;
+	background-color: #d5d5d5;
+	box-shadow: 6px 6px 3px #888888;
+	font-family: ¸¼Àº°íµñ, ±¼¸²;
+	font-style: inherit;
+	font-size: 24px;
+	color: #000000;
+}
+
+#boxtext {
+	width: 520px;
+	height: 150px;
+	background-color: #f5f5f5;
+	box-shadow: 10px 10px 5px #888888;
+}
+</style>
+
+
+
+<div>
+	<table id="boxmenu">
+		<tr>
+			<td width="252" height="20">
+				<p align="center">
+					<span class="glyphicon glyphicon-book"></span> ÃÖ±Ù ±âºÎ³»¿ª
+				</p>
+			</td>
+			<td width="82" height="20">
+				<p align="center">
+
+					<a href="board2-1.do"><span
+						style="font-size: 16pt; color: #282828">´õº¸±â</font></span></a>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<%
+		/*             try {
+		            
+		              String b_title;
+		              int b_id;
+		              
+		              Class.forName("com.mysql.jdbc.Driver");
+		              Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb?autoReconnect=true&useUnicode = true&characterEncoding = euc-kr ", "root", "root123");
+		              Statement stmt = conn.createStatement();
+		              
+		              ResultSet rs = stmt.executeQuery("select b_id, b_title from board order by b_id desc limit 0,5");
+		              
+		              b_id=rs.getInt(1);
+		              b_title=rs.getString(2);
+		 */
+	%>
+<%-- 	<table border='1'>
+		<tr>
+			<td>noticeDate</td>
+			<td>bookSubject</td>
+			<td>bookPic</td>
+			</tr>
+			<c:forEach items="${mainlist }" var="mainlist">
+			<tr>
+			<td>${mainlist.noticeDate}</td>
+			<td>${mainlist.bookSubject}</td>
+			<td>${mainlist.bookPic}</td>
+
+			
+			</tr>
+
+	</table> --%>
+
+
+	<table id="boxtext">
+		<tr>
+
+			<p>
+			<c:forEach items="${boardMmainlist }" var="boardMmainlist">
+			<td align="center"><a href='boardRead.do?noticeNo=${boardMmainlist.noticeNo }'><img
+					src="<%=request.getContextPath()%>/resources/bookImg/${boardMmainlist.bookPic}"
+					width="60" height="100"><br>${boardMmainlist.bookSubject}</a></td>
+
+			</c:forEach>
+
+
+			</ul>
+
+		</tr>
+
+		</p>
+
+		</tr>
+
+	</table>
+</div>
+<%-- <%     
+          }catch(Exception e){
+          out.println(e);
+          }
+     %>
+ --%>
+
+
+</html>
