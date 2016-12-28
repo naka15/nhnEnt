@@ -11,7 +11,7 @@
 	</appender>
 	
 	<!-- Application Loggers -->
-	<logger name="com.baseCamp.sr">
+	<logger name="com.baseCamp.src">
 		<level value="info" />
 	</logger>
 	
