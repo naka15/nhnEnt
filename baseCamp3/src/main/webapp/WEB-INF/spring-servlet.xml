@@ -35,11 +35,11 @@
 	<!-- <bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
  -->
-<!-- 	<context:component-scan base-package="transactionManager" />
+ 	<context:component-scan base-package="transactionManager" />
 
 	<bean id="transactionManager"
 		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-		p:dataSource-ref="dataSource" /> -->
+		p:dataSource-ref="dataSource" />
 
 
 
