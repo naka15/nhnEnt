@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import guest.dto.testDTO;
 
 @Controller
-@RequestMapping("/guest/test/")
 public class guestController {
  
     @RequestMapping(value= "/bodyTest", method = RequestMethod.GET)
