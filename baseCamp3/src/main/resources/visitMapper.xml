@@ -9,16 +9,23 @@
   		INSERT INTO vst_book(
   			email,
   			pwd,
-  			detail
+  			detail,
+  			create_date,
+  			modify_date
   		)VALUES(
   			#{email},
   			#{pwd},
-  			#{detail}
+  			#{detail},
+  			now(),
+  			now()
   		)
+  		ON DUPLICATE KEY UPDATE email=#{email}, pwd=#{pwd}, detail=#{detail}, modify_date = now();
   	</insert>
+	
 	
 	<select id="selectList" resultType="visit">
 		select email, pwd, detail, create_date
 		from vst_book
+		order by create_date desc
 	</select>
 </mapper>
